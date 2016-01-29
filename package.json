@@ -1,0 +1,40 @@
+{
+  "name": "babel-plugin-encapsulate-jsx",
+  "version": "1.0.0",
+  "description": "babel plugin to encapsulate jsx with its package.json's name and version",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "mocha --compilers js:babel-core/register --reporter spec",
+    "build": "babel -d dist index.js"
+  },
+  "keywords": [
+    "babel",
+    "plugin",
+    "jsx",
+    "react",
+    "encapsulate",
+    "css",
+    "encapsulation",
+    "namespace"
+  ],
+  "author": "Craftsy and Sympoz Inc.",
+  "contributors": [
+    "Don Abrams <don.abrams@craftsy.com>"
+  ],
+  "license": "MIT",
+  "repository": "craftsy/encapsulate",
+  "dependencies": {
+    "babel-core": "^6.3.17",
+    "findup-sync": "^0.3.0",
+    "lodash.at": "^4.0.0"
+  },
+  "devDependencies": {
+    "babel": "^6.3.13",
+    "babel-cli": "^6.3.17",
+    "babel-plugin-transform-react-jsx": "^6.3.13",
+    "babel-preset-es2015": "^6.3.13",
+    "chai": "^3.3.0",
+    "uglify-js": "^2.6.1",
+    "mocha": "^2.3.3"
+  }
+}
