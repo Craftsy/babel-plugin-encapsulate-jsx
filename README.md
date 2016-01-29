@@ -1,6 +1,11 @@
 babel-plugin-encapsulate-jsx
 ============================
 
+TLDR; A babel plugin to namespace your components to package/version combinations. There is an [associated css plugin](TODO).
+
+why
+---
+
 At Craftsy, we use a [monorepo](http://danluu.com/monorepo/): each React component is in it's own npm package.
 
 `src/example/package.json`:
