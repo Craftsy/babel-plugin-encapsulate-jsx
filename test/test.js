@@ -2,6 +2,7 @@
 import {transform} from 'babel-core';
 import {expect} from 'chai';
 import {minify} from 'uglify-js';
+import path from 'path';
 
 // This is a little utility to make it easier to compare code generated;
 // Generated code may be syntatically equivalent but not strictly equivalent.
@@ -12,8 +13,8 @@ const encapsulateTransformOptions = {
         '../index',
         ['transform-react-jsx', { pragma: 'j' } ],
     ],
-    filename: './test/fixtures/yay.js',
-    filenameRelative: 'test/fixtures/yay.js',
+    filename: path.join(__dirname, './fixtures/yay.js'),
+    filenameRelative: 'fixtures/yay.js',
 };
 const jsxOnlyTransformOptions = {
     plugins: [

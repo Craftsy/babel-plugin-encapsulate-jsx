@@ -64,7 +64,7 @@ function EncapsulateJsx(_ref) {
     var processPackage = function processPackage(optIn, optKey) {
         var calcIsApplied = isAppliedFromPkg(optIn, optKey);
         return simpleCache(function (filename) {
-            var directory = _path2.default.join(process.cwd(), _path2.default.dirname(filename));
+            var directory = _path2.default.dirname(filename);
             var packagePath = packagePathCache(directory);
             var pkg = pkgFromPath(packagePath);
             var isApplied = calcIsApplied(pkg);

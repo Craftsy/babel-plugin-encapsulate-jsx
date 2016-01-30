@@ -35,7 +35,7 @@ export default function EncapsulateJsx({types: t}) {
     const processPackage = (optIn, optKey) => {
         const calcIsApplied = isAppliedFromPkg(optIn, optKey);
         return simpleCache((filename)=>{
-            const directory = path.join(process.cwd(), path.dirname(filename));
+            const directory = path.dirname(filename);
             const packagePath = packagePathCache(directory);
             const pkg = pkgFromPath(packagePath);
             const isApplied = calcIsApplied(pkg);
