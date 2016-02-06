@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-encapsulate-jsx",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "babel plugin to encapsulate jsx with its package.json's name and version",
   "main": "dist/index.js",
   "scripts": {
@@ -22,7 +22,7 @@
     "Don Abrams <don.abrams@craftsy.com>"
   ],
   "license": "MIT",
-  "repository": "craftsy/encapsulate",
+  "repository": "https://github.com/Craftsy/babel-plugin-encapsulate-jsx",
   "dependencies": {
     "babel-core": "^6.3.17",
     "findup-sync": "^0.3.0",
