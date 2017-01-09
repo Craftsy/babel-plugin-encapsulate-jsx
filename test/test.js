@@ -10,10 +10,10 @@ const u = (code)=> minify(code, {fromString: true, mangle: false}).code;
 
 const encapsulateTransformOptions = {
     plugins: [
-        '../index',
+        path.join(__dirname, '../index'),
         ['transform-react-jsx', { pragma: 'j' } ],
     ],
-    filename: path.join(__dirname, './fixtures/yay.js'),
+    filename: path.join(__dirname, './fixtures/yayEncapsulation.js'),
     filenameRelative: 'fixtures/yay.js',
 };
 const jsxOnlyTransformOptions = {
@@ -26,15 +26,9 @@ const jsxOnlyTransformOptions = {
 };
 
 describe('encapsulate-jsx', function() {
-    const className = 'yayness_5_6_7'; // name generated from fixtures/package.json
+    const className = 'yayEncapsulation'; // classname derived from filename `yayEncapsulation.js`
     describe('configuration', function() {
-        it('defaults to optOut');
-        it('can be set to optIn');
-        it('uses the truthiness of optKey to determine optIn/optOut');
-        it('defaults optKey to cssMain');
-    });
-    describe('preconditions', function() {
-        it('filenameRelative (relative to cwd) must be specified so log filename can be found');
+        it('excludes files that opt out');
     });
     describe('encapsulation', function() {
         it('can encapsulate a JSX Element with no attributes', function() {

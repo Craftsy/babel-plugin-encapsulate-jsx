@@ -1,66 +1,27 @@
-import fs from 'fs';
-import path from 'path';
-import findup from 'findup-sync';
-import at from 'lodash.at';
+const nodepath = require('path');
+const classnameFromFilename = (filename) => filename.replace(/(^.*)\..*/, '$1').replace(/\W+/g, '_');
 
-function simpleCache(f) {
-    const cache = {};
-    return (k) => {
-        if (!cache[k]) {
-            cache[k] = f(k);
-        }
-        return cache[k];
-    };
-}
-
-export default function EncapsulateJsx({types: t}) {
-    const packagePathCache = simpleCache((directory) => {
-        const packagePath = findup('package.json', {cwd: directory});
-        if (!packagePath) {
-            throw new Error(`Unable to find a package.json in ${directory} or its ancestors.`);
-        }
-        return packagePath;
-    });
-    const pkgFromPath = (packagePath) => JSON.parse(fs.readFileSync(packagePath));
-    const classnameFromPkg = (pkg) => `${pkg.name.replace(/[@\/]/g, '_')}_${pkg.version.replace(/\./g, '_')}`;
-    const isAppliedFromPkg = (optIn, optKey) => (pkg) => {
-        const optVal = at(pkg, optKey)[0];
-        if (optIn) {
-            if (!optVal) return false;
-        } else { // optOut
-            if (optVal) return false;
-        }
-        return true;
-    };
-    const processPackage = (optIn, optKey) => {
-        const calcIsApplied = isAppliedFromPkg(optIn, optKey);
-        return simpleCache((filename)=>{
-            const directory = path.dirname(filename);
-            const packagePath = packagePathCache(directory);
-            const pkg = pkgFromPath(packagePath);
-            const isApplied = calcIsApplied(pkg);
-            return {isApplied, className: isApplied ? classnameFromPkg(pkg) : undefined};
-        });
-    };
-    // big assumption here that state.opts is immutable
-    const getProcessPackageForOpts = simpleCache(({
-            optIn=false, // optOut by default (by including this plugin you're opting in)
-            optKey='cssMain', // keyPath for optIn or optOut
-            // TODO: let someone specify a pattern to use via package.json
-        })=>processPackage(optIn, optKey));
+module.exports = function EncapsulateJsx({types: t}) {
     return {
         visitor: {
+            Program: function transform(path, state) {
+                const fileComments = path.parent.comments;
+                if (fileComments && fileComments.length) {
+                    if (fileComments.filter(comment => comment.value.indexOf('disable-encapsulation') !== -1).length > 0) {
+                        state.disableEncapsulation = true;
+                    }
+                }
+            },
+
             JSXOpeningElement: function transform(path, state) {
-                if (path.node.encapsulatedAlready) {
+                if (path.node.encapsulatedAlready || state.disableEncapsulation === true) {
                     return;
                 }
-                const processPackage = getProcessPackageForOpts(state.opts);
-                const filename = state.file.log.filename;
-                const {isApplied, className} = processPackage(filename);
-                if (!isApplied) return;
+                const filename = nodepath.basename(state.file.log.filename);
+                const className = classnameFromFilename(filename);
 
                 const classnameAttributes = path.node.attributes
-                    .filter(a=>t.isJSXAttribute(a) && t.isJSXIdentifier(a.name, {name: 'className'}));
+                .filter(a=>t.isJSXAttribute(a) && t.isJSXIdentifier(a.name, {name: 'className'}));
                 if (!classnameAttributes.length) {
                     const node = t.jSXOpeningElement(
                         path.node.name,

@@ -1,7 +1,7 @@
 {
   "name": "babel-plugin-encapsulate-jsx",
-  "version": "1.0.1",
-  "description": "babel plugin to encapsulate jsx with its package.json's name and version",
+  "version": "2.0.0",
+  "description": "babel plugin to encapsulate jsx based on filename",
   "main": "dist/index.js",
   "scripts": {
     "test": "mocha --compilers js:babel-core/register --reporter spec",
@@ -19,14 +19,13 @@
   ],
   "author": "Craftsy and Sympoz Inc.",
   "contributors": [
+    "Chandler Prall <chandler@craftsy.com>",
     "Don Abrams <don.abrams@craftsy.com>"
   ],
   "license": "MIT",
   "repository": "https://github.com/Craftsy/babel-plugin-encapsulate-jsx",
   "dependencies": {
-    "babel-core": "^6.3.17",
-    "findup-sync": "^0.3.0",
-    "lodash.at": "^4.0.0"
+    "babel-core": "^6.3.17"
   },
   "devDependencies": {
     "babel": "^6.3.13",
