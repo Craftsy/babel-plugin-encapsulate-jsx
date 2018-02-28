@@ -3,7 +3,7 @@ babel-plugin-encapsulate-jsx
 
 TLDR; A babel plugin to auto-generate CSS classnames for JSX components.
 
-This plugin user the filename to generate a CSS classname for all JSX elements in that file.
+This plugin uses the filename to generate a CSS classname for all JSX elements in that file.
 
 We're pretty aggressive here and there are more optimal ways to add class names everywhere. However, with gzip, the additional bytesize for adding this complexity are pretty minimal.
 
@@ -17,6 +17,17 @@ Install with `npm install --save-dev babel-plugin-encapsulate-jsx`. Then, add th
 {
     "presets": ["es2015", "react"],
     "plugins": ["babel-plugin-encapsulate-jsx"]
+}
+```
+
+By default the plugin will add a className attribute to every JSX element except React.Fragment and Fragment elements as those cannot receive properties. You can override this default list of exclusions and add your own with the `ignoredElements` configuration:
+
+```
+{
+    "presets": ["es2015", "react"],
+    "plugins": [
+        ["babel-plugin-encapsulate-jsx", {ignoredElements: ['React.Fragment', 'Fragment', 'IgnoreThis', 'IgnoreThat']}]
+    ]
 }
 ```
 

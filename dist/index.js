@@ -5,6 +5,22 @@ var classnameFromFilename = function classnameFromFilename(filename) {
     return filename.replace(/(^.*)\..*/, '$1').replace(/\W+/g, '_');
 };
 
+var defaultIgnoredElements = ['React.Fragment', 'Fragment'];
+
+function doesElementNameMatch(elementNameNode, elements) {
+    var elementIdentifierParts = [];
+
+    var currentNode = elementNameNode;
+    while (currentNode.type === 'JSXMemberExpression') {
+        elementIdentifierParts.unshift(currentNode.property.name);
+        currentNode = currentNode.object;
+    }
+    elementIdentifierParts.unshift(currentNode.name);
+
+    var elementName = elementIdentifierParts.join('.');
+    return elements.indexOf(elementName) !== -1;
+}
+
 module.exports = function EncapsulateJsx(_ref) {
     var t = _ref.types;
 
@@ -25,6 +41,12 @@ module.exports = function EncapsulateJsx(_ref) {
                 if (path.node.encapsulatedAlready || state.disableEncapsulation === true) {
                     return;
                 }
+
+                var ignoredElements = state.opts.ignoredElements || defaultIgnoredElements;
+                if (doesElementNameMatch(path.node.name, ignoredElements)) {
+                    return;
+                }
+
                 var filename = nodepath.basename(state.file.log.filename);
                 var className = classnameFromFilename(filename);
 
