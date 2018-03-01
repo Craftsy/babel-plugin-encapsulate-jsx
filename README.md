@@ -3,9 +3,9 @@ babel-plugin-encapsulate-jsx
 
 TLDR; A babel plugin to auto-generate CSS classnames for JSX components.
 
-This plugin user the filename to generate a CSS classname for all JSX elements in that file.
+This plugin uses the filename to generate a CSS classname for all JSX elements in that file.
 
-We're pretty aggressive here and there are more optimal ways to add class names everywhere. However, with gzip, the additional bytesize for adding this complexity are pretty minimal.
+We're pretty aggressive here, and there are more optimal ways to add class names everywhere. However, with gzip, the additional bytesize for adding this complexity is pretty minimal.
 
 Use
 ---
