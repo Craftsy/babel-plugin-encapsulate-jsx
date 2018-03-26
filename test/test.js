@@ -95,4 +95,37 @@ describe('encapsulate-jsx', function() {
             expect(u(compiled)).to.equal(u(compiledExpectedCode));
         });
     });
+    describe('ignores a customizeable list of elements', function() {
+        it('ignores React.Fragment elements', function() {
+            const code = '<React.Fragment/>';
+            const expectedCode = `<React.Fragment/>`;
+            const compiled = transform(code, encapsulateTransformOptions).code;
+            const compiledExpectedCode = transform(expectedCode, jsxOnlyTransformOptions).code;
+            expect(u(compiled)).to.equal(u(compiledExpectedCode));
+        });
+        it('ignores Fragment elements', function() {
+            const code = '<Fragment/>';
+            const expectedCode = `<Fragment/>`;
+            const compiled = transform(code, encapsulateTransformOptions).code;
+            const compiledExpectedCode = transform(expectedCode, jsxOnlyTransformOptions).code;
+            expect(u(compiled)).to.equal(u(compiledExpectedCode));
+        });
+        it('ignores custom elements', function() {
+            const code = '<IgnoreMe/>';
+            const expectedCode = `<IgnoreMe/>`;
+            const transformWithIgnore = {
+                plugins: [
+                    [path.join(__dirname, '../index'), {
+                        ignoredElements: ['IgnoreMe']
+                    }],
+                    ['transform-react-jsx', { pragma: 'j' } ],
+                ],
+                filename: path.join(__dirname, './fixtures/yayEncapsulation.js'),
+                filenameRelative: 'fixtures/yay.js',
+            };
+            const compiled = transform(code, transformWithIgnore).code;
+            const compiledExpectedCode = transform(expectedCode, jsxOnlyTransformOptions).code;
+            expect(u(compiled)).to.equal(u(compiledExpectedCode));
+        });
+    });
 });

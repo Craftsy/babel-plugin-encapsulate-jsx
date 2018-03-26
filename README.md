@@ -20,6 +20,17 @@ Install with `npm install --save-dev babel-plugin-encapsulate-jsx`. Then, add th
 }
 ```
 
+By default the plugin will add a className attribute to every JSX element except React.Fragment and Fragment elements as those cannot receive properties. You can override this default list of exclusions and add your own with the `ignoredElements` configuration:
+
+```
+{
+    "presets": ["es2015", "react"],
+    "plugins": [
+        ["babel-plugin-encapsulate-jsx", {ignoredElements: ['React.Fragment', 'Fragment', 'IgnoreThis', 'IgnoreThat']}]
+    ]
+}
+```
+
 Building
 --------
 `npm run test` runs the tests against the ES6 src code.
