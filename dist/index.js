@@ -1,9 +1,7 @@
 'use strict';
 
-var nodepath = require('path');
-var classnameFromFilename = function classnameFromFilename(filename) {
-    return filename.replace(/(^.*)\..*/, '$1').replace(/\W+/g, '_');
-};
+var _require = require("./utils"),
+    makeClassNameFromPath = _require.makeClassNameFromPath;
 
 var defaultIgnoredElements = ['React.Fragment', 'Fragment'];
 
@@ -47,8 +45,7 @@ module.exports = function EncapsulateJsx(_ref) {
                     return;
                 }
 
-                var filename = nodepath.basename(state.file.log.filename);
-                var className = classnameFromFilename(filename);
+                var className = makeClassNameFromPath(state.file.log.filename);
 
                 var classnameAttributes = path.node.attributes.filter(function (a) {
                     return t.isJSXAttribute(a) && t.isJSXIdentifier(a.name, { name: 'className' });
