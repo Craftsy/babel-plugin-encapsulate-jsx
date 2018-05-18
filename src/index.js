@@ -1,18 +1,17 @@
-const nodepath = require('path');
-const classnameFromFilename = (filename) => filename.replace(/(^.*)\..*/, '$1').replace(/\W+/g, '_');
+const {makeClassNameFromPath} = require("./utils");
 
 const defaultIgnoredElements = ['React.Fragment', 'Fragment'];
 
 function doesElementNameMatch(elementNameNode, elements) {
     const elementIdentifierParts = [];
-    
+
     let currentNode = elementNameNode;
     while (currentNode.type === 'JSXMemberExpression') {
         elementIdentifierParts.unshift(currentNode.property.name);
         currentNode = currentNode.object;
     }
     elementIdentifierParts.unshift(currentNode.name);
-    
+
     const elementName = elementIdentifierParts.join('.');
     return elements.indexOf(elementName) !== -1;
 }
@@ -33,14 +32,13 @@ module.exports = function EncapsulateJsx({types: t}) {
                 if (path.node.encapsulatedAlready || state.disableEncapsulation === true) {
                     return;
                 }
-                
+
                 const ignoredElements = state.opts.ignoredElements || defaultIgnoredElements;
                 if (doesElementNameMatch(path.node.name, ignoredElements)) {
                     return;
                 }
-                
-                const filename = nodepath.basename(state.file.log.filename);
-                const className = classnameFromFilename(filename);
+
+              const className = makeClassNameFromPath(state.file.log.filename);
 
                 const classnameAttributes = path.node.attributes
                 .filter(a=>t.isJSXAttribute(a) && t.isJSXIdentifier(a.name, {name: 'className'}));
@@ -99,4 +97,4 @@ module.exports = function EncapsulateJsx({types: t}) {
             },
         },
     };
-}
+};

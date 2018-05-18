@@ -10,7 +10,7 @@ const u = (code)=> minify(code, {fromString: true, mangle: false}).code;
 
 const encapsulateTransformOptions = {
     plugins: [
-        path.join(__dirname, '../index'),
+        path.join(__dirname, '../src/index'),
         ['transform-react-jsx', { pragma: 'j' } ],
     ],
     filename: path.join(__dirname, './fixtures/yayEncapsulation.js'),
@@ -115,7 +115,7 @@ describe('encapsulate-jsx', function() {
             const expectedCode = `<IgnoreMe/>`;
             const transformWithIgnore = {
                 plugins: [
-                    [path.join(__dirname, '../index'), {
+                    [path.join(__dirname, '../src/index'), {
                         ignoredElements: ['IgnoreMe']
                     }],
                     ['transform-react-jsx', { pragma: 'j' } ],
